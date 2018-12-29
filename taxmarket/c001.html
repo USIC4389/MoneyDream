@@ -1,0 +1,134 @@
+
+<HEAD>
+
+    <TITLE>TAX Market Calculator</TITLE>
+    <script LANGUAGE="JavaScript">
+var result
+var enterClicked = false
+result=""
+function addChar(val){
+ if( enterClicked == true)
+ {
+  Clear()
+  enterClicked = false
+ }
+ document.all("txtResult").value=document.all("txtResult").value+val
+ result = result+val
+}
+function Calc(){
+ document.all("txtResult").value=eval(result)
+ result=""
+ enterClicked = true
+}
+function Clear(){
+ document.all("txtResult").value=""
+ result=""
+} 
+</script>
+  </HEAD>
+  <BODY>
+
+    <CENTER>
+    <H1>TAX Market</H1>
+
+    <FORM>
+      <TABLE BORDER="5">
+        <TR>
+          <TD ALIGN=CENTER COLSPAN=4>
+            <input type=text name=txtResult>
+          </TD>
+        </TR>
+
+        <TR ALIGN=CENTER>
+          <TD>
+            <INPUT TYPE="button" value="    7    "  
+               onClick="addChar('7')">
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="    8    " 
+               onClick="addChar('8')">
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="    9    "
+               onClick="addChar('9')">
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="    /     "
+               onClick="addChar('/')">
+          </TD>
+        </TR>
+
+        <TR ALIGN=CENTER>
+          <TD>
+            <INPUT TYPE="button" value="    4    "
+               onClick="addChar('4')">
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="    5    "
+               onClick="addChar('5')">
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="    6    "
+               onClick="addChar('6')">
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="    *    "
+               onClick="addChar('*')">
+          </TD>
+        </TR>
+
+        <TR ALIGN=CENTER>
+          <TD>
+            <INPUT TYPE="button" value="    1    "
+               onClick="addChar('1')">
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="    2    "
+               onClick="addChar('2')">
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="    3    "
+               onClick="addChar('3')">
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="     -    " 
+               onClick="addChar('-')">
+          </TD>
+        </TR>
+
+        <TR ALIGN=CENTER>
+          <TD>
+            <INPUT TYPE="button" value="    0    "
+               onClick="addChar('0')"> 
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="     .    "
+               onClick="addChar('.')"> 
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="   +/-   "
+               onClick="changeSign()">
+          </TD>
+          <TD>
+            <INPUT TYPE="button" value="    +    "
+               onClick="addChar('+')">
+          </TD>
+        </TR>
+
+     
+        <TR ALIGN=CENTER>
+          <TD colspan="2">
+            <INPUT TYPE="button" value="      Enter      " 
+               onClick="Calc()">
+          </TD>
+          <TD colspan="2">
+            <INPUT TYPE="button" value="         C          "
+               onClick="Clear()">
+          </TD>
+        </TR>
+    </TABLE>
+    </FORM>
+    </CENTER>
+
+  </BODY>
+</HTML>
