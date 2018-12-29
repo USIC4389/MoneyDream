@@ -15,7 +15,15 @@ function addChar(val){
  document.all("txtResult").value=document.all("txtResult").value+val
  result = result+val
 }
-function Calc(){
+        function back(){
+            if(flag == 1){
+                digit1.pop();
+            }else{
+                digit2.pop();
+            }
+            printVal("l");
+        }
+ function Calc(){
  document.all("txtResult").value=eval(result)
  result=""
  enterClicked = true
