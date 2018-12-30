@@ -103,7 +103,11 @@
   var mode = "null";
   var error = 0;
 // 천단위 ,
-
+function dispInt(temp)
+{
+    var str = temp.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1,');
+    document.aform.result.value = str;
+}
   
   
   function btBack() { // Backspace 버튼
