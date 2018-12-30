@@ -102,7 +102,14 @@
   var operator = "null";
   var mode = "null";
   var error = 0;
-
+// 천단위 ,
+  var numComma = function(num){
+   num = String(num);
+   return num.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,"$1,");
+  };
+  
+  
+  
   function btBack() { // Backspace 버튼
     if(temp != "null") {
       if((temp.toString()).length==1) temp=0;
@@ -293,6 +300,7 @@
   document.onkeydown = keyDown;
 //-->
 </script>
+
 </HEAD>
 
 <BODY>
