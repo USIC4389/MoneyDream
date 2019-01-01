@@ -1,4 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
 <TITLE> TAX Market Calculator</TITLE>
@@ -7,361 +6,337 @@
 <META NAME="Keywords" CONTENT="">
 <META NAME="Description" CONTENT="">
 <style type="text/css">
-<!-- 
-  #panel { 
-    border: 1 solid;
-    border-left-color: #FFFFFF;
-    border-top-color: #FFFFFF;
-    border-right-color: #808080;
-    border-bottom-color: #808080;
-    background-color: #D4D0C8;
-    width: 300;
-    height: 430;
-  }
-  #panel_box { 
-    border: 1 solid;
-    border-left-color: #D4D0C8;
-    border-top-color: #D4D0C8;
-    border-right-color: #404040;
-    border-bottom-color: #404040;
-    width: 300;
-    height: 430;
-  }
-  .cal_display {
-    text-align: center;
-    padding-bottom: 20;
-  }
-  .cal_top_line {
-    padding-bottom: 12;
-    padding-right: 10;
-    text-align: right;
-    word-spacing: -3;
-  }
-  .cal_line {
-    padding-bottom: 6;
-    padding-right: 10;
-    text-align: right;
-    word-spacing: -1;
-  }
-  fieldset {
-    color: blue;
-    border: 0;
-    padding-top: 6;
-    padding-bottom: 6;
-    font-size: 18;
-    font-weight: bolder;
-    font-family: Times New Roman;
-  }
-  .dispbox {
-    font-size:34;
-    color: black;
-    text-align: right;
-    padding-right: 5;
-    width: 277;
-    height:42;
-  } 
-  .state {
-    background-color:#D4D0C8;
-    width:32;
-    height:50;
-    text-align:center;
-    padding-top:8;
-  }
-  .big_btn {
-    color: red;
-    width: 74;
-    height: 54;
-    font-size: 18;
-  }
-  .M_btn {
-    padding-right: 6;
-  }
-  .bluebtn {
-    color: blue;
-    width: 42;
-    height: 54;
-    font-size: 18;
-  }
-  .redbtn {
-    color: red;
-    width: 42;
-    height: 54;
-    font-size: 18;
-  }
+<!--
+#panel {
+border: 1 solid;
+border-left-color: #FFFFFF;
+border-top-color: #FFFFFF;
+border-right-color: #808080;
+border-bottom-color: #808080;
+background-color: #D4D0C8;
+width: 300;
+height: 430;
+}
+#panel_box {
+border: 1 solid;
+border-left-color: #D4D0C8;
+border-top-color: #D4D0C8;
+border-right-color: #404040;
+border-bottom-color: #404040;
+width: 300;
+height: 430;
+}
+.cal_display {
+text-align: center;
+padding-bottom: 20;
+}
+.cal_top_line {
+padding-bottom: 12;
+padding-right: 10;
+text-align: right;
+word-spacing: -3;
+}
+.cal_line {
+padding-bottom: 6;
+padding-right: 10;
+text-align: right;
+word-spacing: -1;
+}
+fieldset {
+color: blue;
+border: 0;
+padding-top: 6;
+padding-bottom: 6;
+font-size: 18;
+font-weight: bolder;
+font-family: Times New Roman;
+}
+.dispbox {
+font-size:34;
+color: black;
+text-align: right;
+padding-right: 5;
+width: 277;
+height:42;
+}
+.state {
+background-color:#D4D0C8;
+width:32;
+height:50;
+text-align:center;
+padding-top:8;
+}
+.big_btn {
+color: red;
+width: 74;
+height: 54;
+font-size: 18;
+}
+.M_btn {
+padding-right: 6;
+}
+.bluebtn {
+color: blue;
+width: 42;
+height: 54;
+font-size: 18;
+}
+.redbtn {
+color: red;
+width: 42;
+height: 54;
+font-size: 18;
+}
 //-->
 </style>
 <script type="text/javascript" language="javascript">
 <!--
-  var total_temp = 0;
-  var equal_temp = 0;
-  var func_temp = 0;
-  var sign_temp = 0;
-  var memory = 0;
-  var mem_state = "null";
-  var temp = "null"
-  var operator = "null";
-  var mode = "null";
-  var error = 0;
-// 천단위 ,
-function dispInt(temp)
-{
-    var str = temp.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1,');
-    document.aform.result.value = str;
+var total_temp = 0;
+var equal_temp = 0;
+var func_temp = 0;
+var sign_temp = 0;
+var memory = 0;
+var mem_state = "null";
+var temp = "null"
+var operator = "null";
+var mode = "null";
+var error = 0;
+// 천단위 , 이부분을 못하고 있습니다. ㅠㅠ
+
+function btBack() { // Backspace 버튼
+if(temp != "null") {
+if((temp.toString()).length==1) temp=0;
+else temp=(temp.toString()).substring(0,(temp.toString()).length-1);
+dispInt(temp);
 }
-  
-  
-  function btBack() { // Backspace 버튼
-    if(temp != "null") {
-      if((temp.toString()).length==1) temp=0;
-      else temp=(temp.toString()).substring(0,(temp.toString()).length-1);
-      dispInt(temp);
-    }
-  } 
+}
+function btClear(opt) { // CE 버튼
+if(isNaN(error) == true) opt = 3;
+switch(opt){
+case 1: total_temp = 0; equal_temp = 0; func_temp = 0; operator = "null"; mode = "null";
+case 2: temp = "null";dispInt(0);break;
+case 3: total_temp = 0; equal_temp = 0; func_temp = 0; temp = "null";dispInt(0);break;
+}
+}
+function dispInt(num) { // 숫자 출력
+if(num == "error_1") calculator.dispCal.value = "0으로 나눌 수 없습니다.";
+else if(num == "error_2") calculator.dispCal.value = "이 함수에 맞는 입력이 아닙니다.";
+else if((num.toString()).indexOf(".") == -1) calculator.dispCal.value = addComma(num) + ".";
+else calculator.dispCal.value = addComma(num);
+error = num;
+}
+function btInt(num) { // 숫자 입력
+if(isNaN(error) == false) {
+if(temp == "null" || temp == "0" || mem_state == "ok") temp = num;
+else temp = temp.toString() + num;
+if(mode == "null" || mode == "operation") mode = "numIn";
+else if(mode == "equal") mode = "new_numIn";
+else mode = "func_numIn";
+mem_state = "null";
+dispInt(temp);
+}
+}
+function btPoint() { // 소수점 입력
+if(isNaN(error) == false) {
+if(temp == "null") temp = "0.";
+else if((temp.toString()).indexOf(".") == -1) temp = temp.toString() + ".";
+}
+}
+function btOpt(opt) { // 연산 버튼
+if(isNaN(error) == false) {
+if(mode == "numIn") {
+if(operator == "null") total_temp = temp;
+else total_temp = calcu(total_temp, operator, temp);
+}
+else if(mode == "new_numIn" || mode == "func_numIn") total_temp = temp;
+else if(mode == "func") total_temp = calcu(total_temp, operator, func_temp);
+else if(mode == "equal_func") total_temp = func_temp;
+operator = opt;
+equal_temp = total_temp;
+mode = "operation";
+temp = "null";
+dispInt(total_temp);
+}
+}
+function btEqual() { // Equal 버튼
+if(operator != "null" && isNaN(error) == false) {
+if(mode == "numIn" || mode == "func_numIn") equal_temp = temp;
+else if(mode == "func" || mode == "equal_func") equal_temp = func_temp;
+total_temp = calcu(total_temp, operator, equal_temp);
+mode = "equal";
+temp = "null";
+dispInt(total_temp);
+}
+}
+function btFunc(opt) { // 함수
+if(isNaN(error) == false) {
+if(mode == "numIn" || mode == "new_numIn" || mode == "func_numIn") func_temp = temp;
+else if(mode == "func" || mode == "equal_func") func_temp = func_temp;
+else func_temp = total_temp;
+switch(opt){
+case 1: if(func_temp < 0) func_temp = "error_2"; else func_temp = Math.sqrt(func_temp); break;
+case 2: func_temp = calcu(total_temp, 3, func_temp)/100; break;
+case 3: if(func_temp == 0) func_temp = "error_1"; else func_temp = 1/func_temp; break;
+}
+if(mode == "equal" || mode == "equal_func" || mode == "numIn") mode = "equal_func";
+else mode = "func";
+temp = "null";
+dispInt(func_temp);
+}
+}
+function btSign() { // 부호
+if(isNaN(error) == false) {
+if(mode == "numIn" || mode == "new_numIn" || mode == "func_numIn") {
+temp *= -1;
+sign_temp = temp;
+}
+else if(mode == "operation") {
+equal_temp = 0;
+sign_temp = 0;
+}
+else if(mode == "equal") {
+mode = "new_numIn";
+temp = total_temp * -1;
+sign_temp = temp;
+}
+else {
+func_temp *= -1;
+sign_temp = func_temp;
+}
+dispInt(sign_temp);
+}
+}
+function calcu(first, operator, second) { // 연산
+var result;
+first = first*1000000;
+second = second*1000000;
+switch(operator) {
+case 1: result = (first + second)/1000000; break;
+case 2: result = (first - second)/1000000; break;
+case 3: result = (first * second)/1000000000000; break;
+case 4: if(second == 0) result = "error_1"; else result = (first / second); break;
+}
+return addComma(result);
+}
+function memCal(opt) { // 기억
+if(isNaN(error) == false) {
+if(opt == 1) {
+memory = 0;
+calculator.memState.value = "";
+}
+else if(opt == 2) {
+temp = "null";
+btInt(memory);
+mem_state = "ok";
+}
+else if(opt == 3) {
+disp_value = calculator.dispCal.value.replace(/\.$/, "");
+memory = disp_value;
+if(disp_value != 0) calculator.memState.value = "M";
+mem_state = "ok";
+}
+else if(opt == 4) {
+disp_value = calculator.dispCal.value.replace(/\.$/, "");
+memory = calcu(memory, 1, disp_value);
+if(disp_value != 0) calculator.memState.value = "M";
+mem_state = "ok";
+}
+}
+}
+function keyDown(e) { // 키보드
+if(IE == true) {
+var keycode = event.keyCode;
+event.keyCode = 0;
+event.cancelBubble = true;
+event.returnValue = false;
+if(keycode == 191 || keycode == 111) btOpt(4);
+else if(keycode == 56 && event.shiftKey || keycode == 106) btOpt(3);
+else if(keycode == 189 || keycode == 109) btOpt(2);
+else if(keycode == 187 && event.shiftKey || keycode == 107) btOpt(1);
+else if(keycode == 76 && event.ctrlKey) memCal(1);
+else if(keycode == 82 && event.ctrlKey) memCal(2);
+else if(keycode == 77 && event.ctrlKey) memCal(3);
+else if(keycode == 80 && event.ctrlKey) memCal(4);
+else if(keycode == 50 && event.shiftKey) btFunc(1);
+else if(keycode == 53 && event.shiftKey) btFunc(2);
+else if(keycode == 57 && event.shiftKey) btFunc(4);
+else if(keycode == 48 && event.shiftKey) btFunc(5);
+else if(keycode == 82) btFunc(3);
+else if(keycode == 13) btEqual();
+else if(keycode == 8) btBack();
+else if(keycode == 46) btClear(2);
+else if(keycode == 27) btClear(1);
+else if(keycode >= 49 && keycode <= 57) btInt(keycode-48);
+else if(keycode >=97 && keycode <= 105) btInt(keycode-96);
+else if(keycode == 48 || keycode == 96) btInt(keycode - keycode);
+else if(keycode == 188 || keycode == 190 || keycode == 110) btPoint();
+else if(keycode == 120) btSign();
+}
+}
+var IE = document.all ? true:false;
+document.onkeydown = keyDown;
 
-  function btClear(opt) { // CE 버튼
-    if(isNaN(error) == true) opt = 3;
-    switch(opt){ 
-      case 1: total_temp = 0; equal_temp = 0; func_temp = 0; operator = "null"; mode = "null";
-      case 2: temp = "null";dispInt(0);break;
-      case 3: total_temp = 0; equal_temp = 0; func_temp = 0; temp = "null";dispInt(0);break;
-    } 
-  } 
 
-  function dispInt(num) { // 숫자 출력
-    if(num == "error_1") calculator.dispCal.value = "0으로 나눌 수 없습니다.";
-    else if(num == "error_2") calculator.dispCal.value = "이 함수에 맞는 입력이 아닙니다.";
-    else if((num.toString()).indexOf(".") == -1) calculator.dispCal.value = num + ".";
-    else calculator.dispCal.value = num;
-    error = num;
-  } 
 
-  function btInt(num) { // 숫자 입력
-    if(isNaN(error) == false) {
-      if(temp == "null" || temp == "0" || mem_state == "ok") temp = num;
-      else temp = temp.toString() + num;
-      if(mode == "null" || mode == "operation") mode = "numIn";
-      else if(mode == "equal") mode = "new_numIn";
-      else mode = "func_numIn";
-      mem_state = "null";
-      dispInt(temp);
-    }
-  }
+//3자리 단위마다 콤마 생성
+function addComma(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
-  function btPoint() { // 소수점 입력
-    if(isNaN(error) == false) {
-      if(temp == "null") temp = "0.";
-      else if((temp.toString()).indexOf(".") == -1) temp = temp.toString() + ".";
-    }
-  } 
 
-  function btOpt(opt) { // 연산 버튼 
-    if(isNaN(error) == false) {
-      if(mode == "numIn") {
-        if(operator == "null") total_temp = temp;
-        else total_temp = calcu(total_temp, operator, temp);
-      }
-      else if(mode == "new_numIn" || mode == "func_numIn") total_temp = temp;
-      else if(mode == "func") total_temp = calcu(total_temp, operator, func_temp);
-      else if(mode == "equal_func") total_temp = func_temp;
-      operator = opt;
-      equal_temp = total_temp;
-      mode = "operation";
-      temp = "null";
-      dispInt(total_temp);
-    }
-  }
-
-  function btEqual() { // Equal 버튼
-    if(operator != "null" && isNaN(error) == false) {
-      if(mode == "numIn" || mode == "func_numIn") equal_temp = temp;
-      else if(mode == "func" || mode == "equal_func") equal_temp = func_temp;
-      total_temp = calcu(total_temp, operator, equal_temp);
-      mode = "equal";
-      temp = "null";
-      dispInt(total_temp);
-    }
-  }
-
-  function btFunc(opt) { // 함수
-    if(isNaN(error) == false) {
-      if(mode == "numIn" || mode == "new_numIn" || mode == "func_numIn") func_temp = temp;
-      else if(mode == "func" || mode == "equal_func") func_temp = func_temp;
-      else func_temp = total_temp;
-      switch(opt){ 
-        case 1: if(func_temp < 0) func_temp = "error_2"; else func_temp = Math.sqrt(func_temp); break;
-        case 2: func_temp = calcu(total_temp, 3, func_temp)/100; break;
-        case 3: if(func_temp == 0) func_temp = "error_1"; else func_temp = 1/func_temp; break;
-      } 
-      if(mode == "equal" || mode == "equal_func" || mode == "numIn") mode = "equal_func";
-      else mode = "func";
-      temp = "null";
-      dispInt(func_temp);
-    }
-  }
-
-  function btSign() { // 부호
-    if(isNaN(error) == false) {
-      if(mode == "numIn" || mode == "new_numIn" || mode == "func_numIn") { 
-        temp *= -1; 
-        sign_temp = temp; 
-      }
-      else if(mode == "operation") { 
-        equal_temp = 0;
-        sign_temp = 0; 
-      }
-      else if(mode == "equal") {
-        mode = "new_numIn";
-        temp = total_temp * -1;
-        sign_temp = temp; 
-      }
-      else {
-        func_temp *= -1;
-        sign_temp = func_temp;
-      }
-
-      dispInt(sign_temp);
-    }
-  }
-
-  function calcu(first, operator, second) { // 연산
-    var result;
-    first = first*1000000;
-    second = second*1000000;
-    switch(operator) { 
-      case 1: result = (first + second)/1000000; break;
-      case 2: result = (first - second)/1000000; break;
-      case 3: result = (first * second)/1000000000000; break;
-      case 4: if(second == 0) result = "error_1"; else result = (first / second); break;
-    } 
-    return result;
-  } 
-
-  function memCal(opt) { // 기억
-    if(isNaN(error) == false) {
-      if(opt == 1) {
-        memory = 0;
-        calculator.memState.value = "";
-      }
-      else if(opt == 2) {
-        temp = "null";
-        btInt(memory);
-        mem_state = "ok";
-      }
-      else if(opt == 3) {
-        disp_value = calculator.dispCal.value.replace(/\.$/, ""); 
-        memory = disp_value; 
-        if(disp_value != 0) calculator.memState.value = "M";
-        mem_state = "ok";
-      }
-      else if(opt == 4) {
-        disp_value = calculator.dispCal.value.replace(/\.$/, ""); 
-        memory = calcu(memory, 1, disp_value); 
-        if(disp_value != 0) calculator.memState.value = "M";
-        mem_state = "ok";
-      }
-    }
-  }
-
-  function keyDown(e) { // 키보드
-    if(IE == true) {
-      var keycode = event.keyCode;
-      event.keyCode = 0;
-      event.cancelBubble = true; 
-      event.returnValue = false;
-      if(keycode == 191 || keycode == 111) btOpt(4);
-      else if(keycode == 56 && event.shiftKey || keycode == 106) btOpt(3);
-      else if(keycode == 189 || keycode == 109) btOpt(2);
-      else if(keycode == 187 && event.shiftKey || keycode == 107) btOpt(1);
-
-      else if(keycode == 76 && event.ctrlKey) memCal(1);
-      else if(keycode == 82 && event.ctrlKey) memCal(2);
-      else if(keycode == 77 && event.ctrlKey) memCal(3);
-      else if(keycode == 80 && event.ctrlKey) memCal(4);
-
-      else if(keycode == 50 && event.shiftKey) btFunc(1);
-      else if(keycode == 53 && event.shiftKey) btFunc(2);
-      else if(keycode == 57 && event.shiftKey) btFunc(4);
-      else if(keycode == 48 && event.shiftKey) btFunc(5);
-      else if(keycode == 82) btFunc(3);
-
-      else if(keycode == 13) btEqual();
-      else if(keycode == 8) btBack(); 
-      else if(keycode == 46) btClear(2);
-      else if(keycode == 27) btClear(1);
-
-      else if(keycode >= 49 && keycode <= 57) btInt(keycode-48);
-      else if(keycode >=97 && keycode <= 105) btInt(keycode-96);
-      else if(keycode == 48 || keycode == 96)  btInt(keycode - keycode);
-      else if(keycode == 188 || keycode == 190 || keycode == 110) btPoint();
-      else if(keycode == 120) btSign();
-    }
-  }
-  var IE = document.all ? true:false;
-  document.onkeydown = keyDown;
 //-->
 </script>
-
 </HEAD>
-
 <BODY>
 <center>
-  <img src="https://usicg.github.io/Geto_Box/tax_logo.jpg" width="350">
 
 <div id="panel_box">
-  <div id="panel">
-  <form name="calculator" onsubmit="return false" style="display:inline;">
-    <fieldset>TAX Ma<font color="red">r</font>ket Calcu</fieldset>
-    <div class="cal_display">
-      <input type="text" class="dispbox" name="dispCal" value="0." readOnly=true onselectstart="return false">
-    </div>
-    <div class="cal_top_line">
-      <span style="padding-right:12px;"><input type="text" class="state" name="memState" readOnly="true"></span>
-      <input type=button value="←" onClick="btBack()" class="big_btn">
-      <input type=button value="CE" onClick="btClear(2)" class="big_btn">
-      <input type=button value="C" onClick="btClear(1)" class="big_btn">
-    </div>
-
-    <div class="cal_line">
-      <span class="M_btn"><input type=button value="MC" onClick="memCal(1)" class="redbtn"></span>
-
-      <input type=button value="7" onClick="btInt(7)" class="bluebtn">
-      <input type=button value="8" onClick="btInt(8)" class="bluebtn">
-      <input type=button value="9" onClick="btInt(9)" class="bluebtn">
-      <input type=button value="/" onClick="btOpt(4)" class="redbtn">
-      <input type=button value="sqrt" onClick="btFunc(1)" class="bluebtn">
-
-    </div>
-
-    <div class="cal_line">
-      <span class="M_btn"><input type=button value="MR" onClick="memCal(2)" class="redbtn"></span>
-      <input type=button value="4" onClick="btInt(4)" class="bluebtn">
-      <input type=button value="5" onClick="btInt(5)" class="bluebtn">
-      <input type=button value="6" onClick="btInt(6)" class="bluebtn">
-      <input type=button value="*" onClick="btOpt(3)" class="redbtn">
-      <input type=button value="%" onClick="btFunc(2)" class="bluebtn">
-    </div>
-
-    <div class="cal_line">
-      <span class="M_btn"><input type=button value="MS" onClick="memCal(3)" class="redbtn"></span>
-
-      <input type=button value="1" onClick="btInt(1)" class="bluebtn">
-      <input type=button value="2" onClick="btInt(2)" class="bluebtn">
-      <input type=button value="3" onClick="btInt(3)" class="bluebtn">
-      <input type=button value="-" onClick="btOpt(2)" class="redbtn">
-      <input type=button value="1/x" onClick="btFunc(3)" class="bluebtn">
-    </div>
-
-    <div class="cal_line">
-      <span class="M_btn"><input type=button value="M+" class="redbtn" onClick="memCal(4)"></span>
-
-      <input type=button value="0" onClick="btInt(0)" class="bluebtn">
-      <input type=button value="+/-" onClick="btSign()" class="bluebtn">
-      <input type=button value="." onClick="btPoint()" class="bluebtn">
-      <input type=button value="+" onClick="btOpt(1)" class="redbtn">
-      <input type=button value="=" onClick="btEqual()" class="redbtn">
-    </div>
-  </form>
-  </div>
+<div id="panel">
+<form name="calculator" onsubmit="return false" style="display:inline;">
+<fieldset>TAX Market Calcu</fieldset>
+<div class="cal_display">
+<input type="text" class="dispbox" name="dispCal" value="0." readOnly=true onselectstart="return false">
+</div>
+<div class="cal_top_line">
+<span style="padding-right:12px;"><input type="text" class="state" name="memState" readOnly="true"></span>
+<input type=button value="←" onClick="btBack()" class="big_btn">
+<input type=button value="CE" onClick="btClear(2)" class="big_btn">
+<input type=button value="C" onClick="btClear(1)" class="big_btn">
+</div>
+<div class="cal_line">
+<span class="M_btn"><input type=button value="MC" onClick="memCal(1)" class="redbtn"></span>
+<input type=button value="7" onClick="btInt(7)" class="bluebtn">
+<input type=button value="8" onClick="btInt(8)" class="bluebtn">
+<input type=button value="9" onClick="btInt(9)" class="bluebtn">
+<input type=button value="/" onClick="btOpt(4)" class="redbtn">
+<input type=button value="sqrt" onClick="btFunc(1)" class="bluebtn">
+</div>
+<div class="cal_line">
+<span class="M_btn"><input type=button value="MR" onClick="memCal(2)" class="redbtn"></span>
+<input type=button value="4" onClick="btInt(4)" class="bluebtn">
+<input type=button value="5" onClick="btInt(5)" class="bluebtn">
+<input type=button value="6" onClick="btInt(6)" class="bluebtn">
+<input type=button value="*" onClick="btOpt(3)" class="redbtn">
+<input type=button value="%" onClick="btFunc(2)" class="bluebtn">
+</div>
+<div class="cal_line">
+<span class="M_btn"><input type=button value="MS" onClick="memCal(3)" class="redbtn"></span>
+<input type=button value="1" onClick="btInt(1)" class="bluebtn">
+<input type=button value="2" onClick="btInt(2)" class="bluebtn">
+<input type=button value="3" onClick="btInt(3)" class="bluebtn">
+<input type=button value="-" onClick="btOpt(2)" class="redbtn">
+<input type=button value="1/x" onClick="btFunc(3)" class="bluebtn">
+</div>
+<div class="cal_line">
+<span class="M_btn"><input type=button value="M+" class="redbtn" onClick="memCal(4)"></span>
+<input type=button value="0" onClick="btInt(0)" class="bluebtn">
+<input type=button value="+/-" onClick="btSign()" class="bluebtn">
+<input type=button value="." onClick="btPoint()" class="bluebtn">
+<input type=button value="+" onClick="btOpt(1)" class="redbtn">
+<input type=button value="=" onClick="btEqual()" class="redbtn">
+</div>
+</form>
+</div>
 </div>
 </center>
 </BODY>
