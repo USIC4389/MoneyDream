@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+ <title>Insert title here</title>
+ <script>
+  function process(){
+   var aVal = document.getElementById("a").value;
+   var bVal = document.getElementById("b").value;
+   var cVal = document.getElementById("c").value;
+   if(aVal.length <= 0){
+    alert("a값을 입력하세요!!");
+   }else if(parseFloat(aVal) <= 0){
+    alert("a값이 0보다 작습니다.!!");
+   }
+   if(bVal.length <= 0){
+    bVal="0"
+   }
+   if(cVal.length <= 0){
+    alert("c값을 입력하세요!!");
+   }else if(parseFloat(cVal) <= 0){
+    alert("c값이 0보다 작습니다.!!");
+   }
+   var resultVal1 = parseFloat(aVal) * parseFloat(bVal) * parseFloat(cVal);
+   document.getElementById("result1").innerText = resultVal1;
+   var resultVal2 = "";
+   if (resultVal1 >= parseFloat(cVal)) {
+    resultVal2 = "<span style='color:blue'>가능</span>";
+   }else{
+    resultVal2 = "<span style='color:red'>"+(parseFloat(cVal)-parseFloat(resultVal1))+"초과로 불가능</span>";
+   }
+   document.getElementById("result2").innerHTML = resultVal2;
+  }
+ </script>
+</head>
+<body>
+ A : <input id="a" onkeyPress="if ((event.keyCode < 47 || event.keyCode > 58) && event.keyCode != 45 && event.keyCode != 46) event.returnValue=false;" style="ime-mode:disabled;">
+ <br/>
+ B : <input id="b" onkeyPress="if ((event.keyCode < 47 || event.keyCode > 58) && event.keyCode != 45 && event.keyCode != 46) event.returnValue=false;" style="ime-mode:disabled;">
+ <br/>
+ C : <input id="c" onkeyPress="if ((event.keyCode < 47 || event.keyCode > 58) && event.keyCode != 45 && event.keyCode != 46) event.returnValue=false;" style="ime-mode:disabled;">
+ <br/>
+ <input type="button" value="계산하기" onclick="process();">
+ <br/>
+ <br/>
+ 결과  : <span id="result1"></span>
+
+</body>
+</html>
